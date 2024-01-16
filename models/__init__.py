@@ -3,7 +3,9 @@
 from os import environ
 
 
-if environ['HBNB_TYPE_STORAGE'] == 'db':
+storage_type = environ.get('HBNB_TYPE_STORAGE', 'file')
+
+if storage_type == 'db':
     from models.engine.db_storage import DBStorage
     storage = DBStorage
 else:

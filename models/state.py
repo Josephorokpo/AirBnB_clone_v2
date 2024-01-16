@@ -11,7 +11,9 @@ class State(BaseModel, Base):
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
 
-    if environ['HBNB_TYPE_STORAGE'] == 'db':
+    storage_type = environ.get('HBNB_TYPE_STORAGE', 'file')
+
+    if storage_type == 'db':
         cities = relationship('City', cascade='all, delete', backref='state')
     else:
         @property
