@@ -56,7 +56,7 @@ class DBStorage:
         # return dictionary
         return my_dict
     
-    def all(self, obj):
+    def new(self, obj):
         """
         add the object to the current database session.
         """
@@ -88,4 +88,3 @@ class DBStorage:
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
 
         self.__session = scoped_session(session)
-
