@@ -1,13 +1,19 @@
 #!/usr/bin/python3
 """This is the place class"""
-
 from models.base_model import BaseModel, Base
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Float, Integer, ForeignKey, Table
 from sqlalchemy.orm import relationship
-from os import environ
+from os import getenv
 
-Base = declarative_base()
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False))
+
 
 class Place(BaseModel, Base):
     """This class defines place
@@ -36,31 +42,39 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-    
-    # Relationship with User object
-    user = relationship('User', backref='places')
-    
-    storage_type = environ.get('HBNB_TYPE_STORAGE', 'file')
+    amenity_ids = []
 
-    if storage_type == 'db':
-        reviews = relationship('Review', cascade='all, delete', backref='place')
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        reviews = relationship('Review',
+                               cascade='all, delete', backref='place')
+        amenities = relationship('Amenity', backref='place_amenities',
+                                 secondary='place_amenity',
+                                 viewonly=False)
     else:
         @property
         def reviews(self):
+            """ getter returns list of reviews """
+            list_of_reviews = []
+            all_reviews = models.strage.all(Review)
+            for review in all_reviews.values():
+                if review.place_id == self.id:
+                    list_of_reviews.append(review)
+            return list_of_reviews
+
+        @property
+        def amenities(self):
+            """ getter returns list of amenities """
+            list_of_amenities = []
+            all_amenities = models.storage.all(Amenity)
+            for key, obj in all_amenities.items():
+                if key in self.amentiy_ids:
+                    list_of_amenities.append(obj)
+            return list_of_amenities
+
+        @amenities.setter
+        def amenities(self, obj=None):
+            """Set amenity_ids
             """
-            getter method that
-            returns the list of Review instances with place_id
-            equals to the current Place.id
-            """
-            from models import storage
-            from models.review import Review
-            # get the dict of all the reviews
-            review_dict = storage.all()
-            review_list = []
-            # loop though the reviews, map those that correspond to current
-            # place_id
-            for review in review_dict.values():
-                if Review.place_id == self.id:
-                    review_list.append(review)
-            # return list of corressponding reviews
-            return review_list
+            if type(obj).__name__ == 'Amenity':
+                new_amenity = 'Amenity' + '.' + obj.id
+                self.amenity_ids.append(new_amenity)
