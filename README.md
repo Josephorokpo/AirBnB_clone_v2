@@ -36,7 +36,7 @@ This repository contains the initial stage of a student project to build a clone
 5. This prompt designates you are in the "HBnB" console. There are a variety of commands available within the console program.
 
 ##### Commands
-    * create - Creates an instance based on given class
+    * create - Creates an instance based on given class and assigns parameters
 
     * destroy - Destroys an object based on class and UUID
 
@@ -71,12 +71,19 @@ Advanced syntax is implemented for the following commands:
 <h3>Primary Command Syntax</h3>
 
 ###### Example 0: Create an object
-Usage: create <class_name>
+Usage: create <class_name> <param1> <param2> ...
+parameter format: <key>=<value>
+value:
+	String: "<value>" => starts with a double quote
+	any double quote inside the value must be escaped with a backslash \
+	all underscores _ must be replace by spaces . Example: You want to set the string My little house to the attribute name, your command line must be name="My_little_house"
+	Float: <unit>.<decimal> => contains a dot .
+	Integer: <number> => default case
 ```
-(hbnb) create BaseModel
+(hbnb) create BaseModel 
 ```
 ```
-(hbnb) create BaseModel
+(hbnb) create Place city_id="0001" user_id="0001" name="My_little_house" number_rooms=4 number_bathrooms=2
 3aa5babc-efb6-4041-bfe9-3cc9727588f8
 (hbnb)                   
 ```
@@ -110,6 +117,7 @@ Usage: update <class_name> <_id>
 
 ###### Example 0: Show all User objects
 Usage: <class_name>.all()
+
 ```
 (hbnb) User.all()
 ["[User] (99f45908-1d17-46d1-9dd2-b7571128115b) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92071), 'id': '99f45908-1d17-46d1-9dd2-b7571128115b', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92056)}", "[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
