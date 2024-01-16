@@ -170,7 +170,6 @@ class HBNBCommand(cmd.Cmd):
 
         # Save updates to file
         storage.save()
-
         print(class_id)
 
 
@@ -182,6 +181,7 @@ class HBNBCommand(cmd.Cmd):
         new = args.partition(" ")
         c_name = new[0]
         c_id = new[2]
+        objects = storage.all()
 
         # guard against trailing args
         if c_id and ' ' in c_id:
@@ -201,7 +201,7 @@ class HBNBCommand(cmd.Cmd):
 
         key = c_name + "." + c_id
         try:
-            print(storage.__objects[key])
+            print(objects[key])
         except KeyError:
             print("** no instance found **")
 
@@ -241,6 +241,7 @@ class HBNBCommand(cmd.Cmd):
         Shows all objects, or all of a class")
         print("[Usage]: all <className>
         """
+        objects = storage.all()
         print_list = []
 
         if args:
@@ -248,11 +249,11 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.__objects.items():
+            for k, v in objects.items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage.__objects.items():
+            for k, v in objects.items():
                 print_list.append(str(v))
 
         print(print_list)
@@ -262,8 +263,9 @@ class HBNBCommand(cmd.Cmd):
         Count current number of class instances
         Usage: count <class_name>
         """
+        objects = storage.all()
         count = 0
-        for k, v in storage.__objects.items():
+        for k, v in objects.items():
             if args == k.split('.')[0]:
                 count += 1
         print(count)
