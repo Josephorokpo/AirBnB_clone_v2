@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 """This is the place class"""
 
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
+from os import environ
 
 Base = declarative_base()
-
 
 class Place(BaseModel, Base):
     """This class defines place
@@ -36,6 +36,29 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-
+    
     # Relationship with User object
     user = relationship('User', backref='places')
+    
+    if environ['HBNB_TYPE_STORAGE'] == 'db':
+        reviews = relationship('Review', cascade='all, delete', backref='place')
+    else:
+        @property
+        def reviews(self):
+            """
+            getter method that
+            returns the list of Review instances with place_id
+            equals to the current Place.id
+            """
+            from models import storage
+            from models.review import Review
+            # get the dict of all the reviews
+            review_dict = storage.all()
+            review_list = []
+            # loop though the reviews, map those that correspond to current
+            # place_id
+            for review in review_dict.values():
+                if Review.place_id == self.id:
+                    review_list.append(review)
+            # return list of corressponding reviews
+            return review_list
