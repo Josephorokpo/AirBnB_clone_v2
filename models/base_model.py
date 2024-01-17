@@ -48,14 +48,20 @@ class BaseModel:
         """Convert instance into dict format"""
         dictionary = dict(self.__dict__)
 
+        print("Keys before deletion:", dictionary.keys())
         if '_sa_instance_state' in dictionary:
             del dictionary['_sa_instance_state']
+        print("Keys after deletion:", dictionary.keys())
+
+        if 'nested_key' in dictionary and '_sa_instance_state' in dictionary['nested_key']:
+            del dictionary['nested_key']['_sa_instance_state']
+        print("Keys after nested deletion:", dictionary.keys())
 
         dictionary['__class__'] = str(type(self).__name__)
 
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
-        
+
         return dictionary
     
     def delete(self):
