@@ -44,15 +44,17 @@ class DBStorage:
         Return: dictionary (<class-name>.<object-id>: <obj>)
         """
         my_dict = {}
+
         # select from the current database using cls as key
         if cls:
-            for rows in self.__session.query(cls).all():
-                my_dict.update({'{}.{}'.format(type(cls).__name__, rows.id): rows})
-        # if cls=None query all the other class
+            for row in self.__session.query(cls).yield_per(100):
+                my_dict[f'{cls.__name__}.{row.id}'] = row
+        # if cls=None query all the other classes
         else:
             for key, value in all_classes.items():
-                for row in self.__session.query(value):
-                    my_dict.update({'{}.{}'.format(type(row).__name__, row.id): row})
+                for row in self.__session.query(value).yield_per(100):
+                    my_dict[f'{value.__name__}.{row.id}'] = row
+
         # return dictionary
         return my_dict
     
