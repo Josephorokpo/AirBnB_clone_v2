@@ -68,7 +68,6 @@ class DBStorage:
         """
         commit all changes of the current database session
         """
-        print("save was called\n")
         self.__session.commit()
 
     def delete(self, obj=None):
