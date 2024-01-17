@@ -44,6 +44,11 @@ class DBStorage:
         Return: dictionary (<class-name>.<object-id>: <obj>)
         """
         my_dict = {}
+
+        print("""
+              all() called
+              """)
+
         # select from the current database using cls as key
         if cls:
             for rows in self.__session.query(cls).all():
@@ -54,6 +59,9 @@ class DBStorage:
                 for row in self.__session.query(value):
                     my_dict.update({'{}.{}'.format(type(row).__name__, row.id): row})
         # return dictionary
+        print(f"""
+{my_dict}
+""")
         return my_dict
     
     def new(self, obj):
