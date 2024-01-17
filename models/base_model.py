@@ -35,13 +35,13 @@ class BaseModel:
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        return '[{}] ({}) {}'.format(cls, self.id, self.to_dict())
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
-        storage.new(self)
+        storage.new(self.to_dict())
         storage.save()
 
     def to_dict(self):
