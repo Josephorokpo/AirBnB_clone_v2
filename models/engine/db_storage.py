@@ -56,7 +56,7 @@ class DBStorage:
         # if cls=None query all the other class
         else:
             for key, value in all_classes.items():
-                for row in self.__session.query(value):
+                for row in self.__session.query(value).all():
                     my_dict.update({'{}.{}'.format(type(row).__name__, row.id): row})
         # return dictionary
         print(f"""
