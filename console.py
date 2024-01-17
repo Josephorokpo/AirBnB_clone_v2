@@ -170,6 +170,11 @@ class HBNBCommand(cmd.Cmd):
 
         # Save updates to file
         storage.save()
+        print(f"""
+create new instance 
+
+{new_instance}
+""")
         print(class_id)
 
 
