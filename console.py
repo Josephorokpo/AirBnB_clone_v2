@@ -169,7 +169,7 @@ class HBNBCommand(cmd.Cmd):
                         new_instance.__dict__.update({attr_key: attr_value})
 
         # Save updates to file
-        storage.new(new_instance)
+#        storage.new(new_instance)
         new_instance.save()
         print(class_id)
 
