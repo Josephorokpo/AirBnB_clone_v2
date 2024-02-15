@@ -12,14 +12,13 @@ def hello_hbnb():
 
 
 @app.route('/hbnb')
-def hbnb():
-    """print web"""
+def display_hbnb():
+    """Display 'HBNB'"""
     return 'HBNB'
 
-
 @app.route('/c/<text>')
-def c_is_fun(text):
-    """print 'C' followed by the value of the text variable"""
+def display_c(text):
+    """Display 'C' followed by the value of the text variable"""
     return 'C {}'.format(text.replace('_', ' '))
 
 
