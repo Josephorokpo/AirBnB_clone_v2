@@ -13,8 +13,8 @@ def hello_hbnb():
 
 
 @app.route('/hbnb')
-def hbnb():
-    """ Print Web """
+def display_hbnb():
+    """ Display 'HBNB """
     return 'HBNB'
 
 
