@@ -17,6 +17,7 @@ all_classes = {'State': State, 'City': City,
                'User': User, 'Place': Place,
                'Review': Review, 'Amenity': Amenity}
 
+
 class DBStorage:
     """
     This class manages the storage for the program using SQLAlchemy
@@ -57,7 +58,7 @@ class DBStorage:
 
         # return dictionary
         return my_dict
-    
+
     def new(self, obj):
         """
         add the object to the current database session.
@@ -82,7 +83,7 @@ class DBStorage:
 
     def reload(self):
         """
-        create all tables in the database (feature of SQLAlchemy) 
+        create all tables in the database (feature of SQLAlchemy)
         """
         # create the session for the current engine
         Base.metadata.create_all(self.__engine)
@@ -90,3 +91,9 @@ class DBStorage:
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
 
         self.__session = scoped_session(session)
+
+    def close(self):
+        """
+        Close the current session
+        """
+        self.__session.close()
