@@ -82,15 +82,12 @@ class DBStorage:
             self.__session.query(class_name).filter(class_name.id == obj.id).delete()
 
     def reload(self):
+        """configuration
         """
-        create all tables in the database (feature of SQLAlchemy)
-        """
-        # create the session for the current engine
-        Base.metadata.create_all(self.__engine)
-        # create the database tables
-        session = sessionmaker(bind=self.__engine, expire_on_commit=False)
-
-        self.__session = scoped_session(session)
+        #Base.metadata.create_all(self.__engine)
+        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(sec)
+        self.__session = Session()
 
     def close(self):
         """
